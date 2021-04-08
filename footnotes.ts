@@ -8,6 +8,7 @@ const sidenoteClasses = ['mb-2'];
 declare global {
     var resizeTimeout; // prevent triggering resize handler until resize is completed.
     var fnSelector;    // the CSS selector that grabs the footnotes from the document
+    var lowestPos : number; // position of lowest sidenote (used to prevent overlapping sidenotes)
 }
 
 export default {
@@ -24,6 +25,7 @@ export default {
 };
 
 function updateFootnotes() {
+    window.lowestPos = 0;
     let counter: number = 0;
     let fn: any;
     let sidenote: boolean = false;
@@ -63,18 +65,24 @@ function updateFootnotes() {
         reference.appendChild(link);
         fn.insertAdjacentHTML('beforebegin', reference.outerHTML);
 
-        if (sidenote) {
-            // add fn.innerHTML to fnContainer
-            console.log(fn.innerHTML);
+        // Note: need to get this from the document or things below won't work properly.
+        // Can't just use the created element above.
+        let ref = document.getElementById("reference" + String(counter));
 
+        if (sidenote) {
             let sn = document.createElement('div');
+            sn.id = "sidenote" + String(counter);
             sn.classList.add(...sidenoteClasses);
             sn.innerHTML = String(counter) + ". " + fn.innerHTML;
             fnContainer.appendChild(sn);
+
+            sn.style.position = 'absolute';
+            sn.style.top = String(calcOffset(sn, ref)) + "px";
         } else {
+            // Note: if we don't do this assignment, fn gets reassigned every loop iteration
+            // and only the last footnote gets styled
             let _fn = fn;
-            let _ref = document.getElementById("reference" + String(counter));
-            _ref.addEventListener("click", function() {
+            ref.addEventListener("click", function() {
                 if (_fn.style.display === "none") {
                     _fn.style.display = "block";
                 } else {
@@ -83,4 +91,23 @@ function updateFootnotes() {
             }, false);
         }
     }
+}
+
+// calculate the offset for absolutely positioning the sidenote
+function calcOffset(sidenote, ref) {
+    let offset: number =
+        ref.getBoundingClientRect().top -
+        sidenote.offsetParent.getBoundingClientRect().top;
+
+    if (offset < window.lowestPos) {
+        offset = window.lowestPos;
+    }
+
+    window.lowestPos =
+        offset +
+        sidenote.offsetHeight +
+        parseInt(window.getComputedStyle(sidenote).marginBottom) +
+        parseInt(window.getComputedStyle(sidenote).marginTop);
+
+    return offset;
 }
