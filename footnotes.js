@@ -55,13 +55,11 @@ function updateFootnotes() {
         // Can't just use the created element above.
         let ref = document.getElementById("reference" + String(counter));
         if (sidenote) {
-            console.log(fn.innerHTML);
             let sn = document.createElement('div');
             sn.id = "sidenote" + String(counter);
             sn.classList.add(...sidenoteClasses);
             sn.innerHTML = String(counter) + ". " + fn.innerHTML;
             fnContainer.appendChild(sn);
-            // let _sn = document.getElementById("sidenote" + String(counter));
             sn.style.position = 'absolute';
             sn.style.top = String(calcOffset(sn, ref)) + "px";
         }
