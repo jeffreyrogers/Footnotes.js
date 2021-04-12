@@ -36,7 +36,6 @@ function updateFootnotes() {
     let footnotes = document.querySelectorAll(window.fnSelector);
     for (fn of footnotes) {
         counter += 1;
-        fn.style.display = 'none';
         fn.classList.add(...footnoteClasses);
         // remove the footnote number if it already exists so that we can update it after the resize
         let expired_fn = document.getElementById('reference' + String(counter));
@@ -68,11 +67,11 @@ function updateFootnotes() {
             // and only the last footnote gets styled
             let _fn = fn;
             ref.addEventListener("click", function () {
-                if (_fn.style.display === "none") {
-                    _fn.style.display = "block";
+                if (_fn.style.display === "block") {
+                    _fn.style.display = "none";
                 }
                 else {
-                    _fn.style.display = "none";
+                    _fn.style.display = "block";
                 }
             }, false);
         }
