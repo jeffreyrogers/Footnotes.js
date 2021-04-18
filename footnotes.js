@@ -53,7 +53,12 @@ function updateFootnotes() {
         // Note: need to get this from the document or things below won't work properly.
         // Can't just use the created element above.
         let ref = document.getElementById("reference" + String(counter));
+        // Note: if we don't do this assignment, fn gets reassigned every loop iteration
+        // and only the last footnote gets styled
+        let _fn = fn;
         if (sidenote) {
+            // hide footnotes if any are currently being displayed
+            _fn.style.display = "none";
             let sn = document.createElement('div');
             sn.id = "sidenote" + String(counter);
             sn.classList.add(...sidenoteClasses);
@@ -63,9 +68,6 @@ function updateFootnotes() {
             sn.style.top = String(calcOffset(sn, ref)) + "px";
         }
         else {
-            // Note: if we don't do this assignment, fn gets reassigned every loop iteration
-            // and only the last footnote gets styled
-            let _fn = fn;
             ref.addEventListener("click", function () {
                 if (_fn.style.display === "block") {
                     _fn.style.display = "none";
