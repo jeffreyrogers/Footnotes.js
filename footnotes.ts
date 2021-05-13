@@ -84,6 +84,9 @@ function updateFootnotes() {
 
             sn.style.position = 'absolute';
             sn.style.top = String(calcOffset(sn, ref)) + "px";
+
+            // bump up container height so that the container actually contains all the sidenotes
+            fnContainer.style.height = (parseInt(sn.style.top, 10) + sn.offsetHeight) + "px";
         } else {
 
             ref.addEventListener("click", function() {
