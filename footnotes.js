@@ -4,7 +4,7 @@ const footnoteClasses = ['rounded', 'bg-gray-900', 'px-2', 'py-1', 'my-1', 'shad
 const linkClasses = ['link'];
 const sidenoteClasses = ['mb-2', 'pl-2', 'border-l-4', 'border-red-300'];
 export default {
-    init: function (selector = "aside") {
+    init: function (selector = "span.footnote") {
         window.fnSelector = selector;
         window.onresize = function (event) {
             clearTimeout(window.resizeTimeout);

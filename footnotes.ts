@@ -12,7 +12,7 @@ declare global {
 }
 
 export default {
-    init: function (selector: string = "aside") {
+    init: function (selector: string = "span.footnote") {
         window.fnSelector = selector;
         window.onresize = function(event) {
             clearTimeout(window.resizeTimeout);
